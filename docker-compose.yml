@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    command: python manage.py run -h 0.0.0.0
+    # entrypoint: ['/usr/app/entrypoint.sh']
+    volumes:
+      - './api:/usr/app'
+    env_file:
+      - ./api/.env.dev
+    ports:
+      - 3050:5000
+    depends_on:
+      - api-db
+  nginx:
+    depends_on:
+      - api
+      - client
+    restart: always
+    build: 
+      dockerfile: Dockerfile
+      context: ./nginx
+    ports:
+      - '3000:80'
+  api-db:
+    build:
+      context: ./api/db
+      dockerfile: Dockerfile
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+  client:
+    build:
+      dockerfile: Dockerfile
+      context: ./client
+    env_file:
+      - ./client/.env.development
+    volumes:
+      - /app/node_modules
+      - ./client:/app
+    environment:
+      - WDS_SOCKET_PORT=0
