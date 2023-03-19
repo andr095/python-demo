@@ -9,10 +9,13 @@ services:
     # entrypoint: ['/usr/app/entrypoint.sh']
     volumes:
       - './api:/usr/app'
-    env_file:
-      - ./api/.env.dev
     ports:
       - 3050:5000
+    environment:
+      - FLASK_DEBUG=1
+      - FLASK_ENV=production
+      - SECRET_KEY=$SECRET_KEY
+      - SQLALCHEMY_DATABASE_URI=$SQLALCHEMY_DATABASE_URI
     depends_on:
       - api-db
   nginx:
@@ -32,16 +35,16 @@ services:
     expose:
       - 5432
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD==$POSTGRES_PASSWORD
   client:
     build:
       dockerfile: Dockerfile
       context: ./client
-    env_file:
-      - ./client/.env.development
     volumes:
       - /app/node_modules
       - ./client:/app
     environment:
       - WDS_SOCKET_PORT=0
+      - REACT_APP_VERSION=$npm_package_version
+      - REACT_APP_API_URL=$REACT_APP_API_URL

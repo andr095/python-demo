@@ -2,14 +2,6 @@ import { AxiosDefaults, AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResp
 
 import { getToken, removeTokenCookies } from '../utils/tokenCookies'
 import { removeUserCookies } from '../utils/userCookies'
-import { api } from './api'
-
-interface IFailedRequestQueue {
-  onSuccess: (token: string) => void
-  onFailure: (error: AxiosError) => void
-}
-
-const failedRequestQueue: IFailedRequestQueue[] = []
 
 export function setAuthorizationHeader (request: AxiosDefaults | AxiosRequestConfig | any, token: string) {
   request.headers['x-access-token'] = `${token}`
