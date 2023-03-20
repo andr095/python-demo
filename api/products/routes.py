@@ -5,5 +5,5 @@ def create_product_routes(api: Api):
     """Adds resources to the api.
     :param api: Flask-RESTful Api Object
     """
-    api.add_resource(CreateProductApi, "/api/product/")
-    api.add_resource(GetProductsListApi, "/api/product/")
+    api.add_resource(CreateProductApi, "/product/")
+    api.add_resource(GetProductsListApi, "/product/")

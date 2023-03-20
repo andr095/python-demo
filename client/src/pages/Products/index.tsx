@@ -14,7 +14,6 @@ import { visuallyHidden } from '@mui/utils'
 import { api } from '../../services/api'
 import { AxiosError } from 'axios'
 import TextField from '@mui/material/TextField'
-import { useTypingTypeout } from '../../utils/hooks'
 import { AuthContext } from '../../context/AuthContext'
 import { createUserCookies } from '../../utils/userCookies'
 
@@ -203,8 +202,6 @@ export default function EnhancedTable () {
     setPage(0)
   }
 
-  const handleSearch = useTypingTypeout(name, 500, setName)
-
   const isSelected = (id: number) => selected.indexOf(id) !== -1
 
   return (
@@ -215,8 +212,8 @@ export default function EnhancedTable () {
           label="Seach by name"
           variant="outlined"
           size="small"
-          defaultValue={user?.productName || ''}
-          onChange={e => handleSearch(e.target.value)}
+          value={name}
+          onChange={e => setName(e.target.value)}
         />
         <TableContainer>
           <Table
